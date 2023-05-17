@@ -1,36 +1,26 @@
-import { SignOut } from "phosphor-react-native";
 import { TouchableOpacity } from "react-native";
-import { useApp, useUser } from "@realm/react";
+import { ArrowLeft } from "phosphor-react-native";
+import { Container, Title } from "./styles";
+import { useTheme } from "styled-components";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
-import theme from "../../theme";
+type Props = {
+  title: string;
+};
 
-import { Container, Greeting, Message, Name, Picture } from "./styles";
-
-export function Header() {
-  const user = useUser();
-  const app = useApp();
+export function Header({ title }: Props) {
+  const { COLORS } = useTheme();
   const insets = useSafeAreaInsets();
-
   const paddingTop = insets.top + 32;
-
-  function handleSignOut() {
-    app.currentUser?.logOut();
-  }
+  const { goBack } = useNavigation();
 
   return (
     <Container style={{ paddingTop }}>
-      <Picture
-        source={{ uri: user?.profile.pictureUrl }}
-        placeholder="L184i9offQof00ayfQay~qj[fQj["
-      />
-      <Greeting>
-        <Message>Olá</Message>
-        <Name>{user?.profile.name}</Name>
-      </Greeting>
-      <TouchableOpacity activeOpacity={0.7} onPress={handleSignOut}>
-        <SignOut size={32} color={theme.COLORS.GRAY_400} weight="fill" />
+      <TouchableOpacity activeOpacity={0.7} onPress={goBack}>
+        <ArrowLeft size={24} weight="bold" color={COLORS.BRAND_LIGHT} />
       </TouchableOpacity>
+      <Title>{title}</Title>
     </Container>
   );
 }
